@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://icepkq3nqrw0"]
+[gd_scene load_steps=4 format=3 uid="uid://icepkq3nqrw0"]
 
 [ext_resource type="Texture2D" uid="uid://ca4b40act8a2m" path="res://icon.svg" id="1_ho27h"]
+[ext_resource type="PackedScene" uid="uid://gbt5kkuskfjh" path="res://personaje.tscn" id="2_rf48w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rf48w"]
 size = Vector2(1220, 69)
 
 [node name="Piso" type="StaticBody2D"]
 position = Vector2(28, 596)
-metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(545.5, 26.5)
@@ -17,3 +17,6 @@ texture = ExtResource("1_ho27h")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(544, 24.5)
 shape = SubResource("RectangleShape2D_rf48w")
+
+[node name="Personaje" parent="." instance=ExtResource("2_rf48w")]
+position = Vector2(294, -174)

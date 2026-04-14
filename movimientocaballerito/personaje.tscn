@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://gbt5kkuskfjh"]
+[gd_scene load_steps=5 format=3 uid="uid://gbt5kkuskfjh"]
 
 [ext_resource type="Texture2D" uid="uid://ca4b40act8a2m" path="res://icon.svg" id="1_4e5bt"]
+[ext_resource type="Script" uid="uid://5yv3fnvf81a4" path="res://personaje.gd" id="1_ltgau"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ltgau"]
 size = Vector2(70, 70)
@@ -9,6 +10,7 @@ size = Vector2(70, 70)
 size = Vector2(62, 49)
 
 [node name="Personaje" type="CharacterBody2D"]
+script = ExtResource("1_ltgau")
 
 [node name="CuerpoVisual" type="Sprite2D" parent="."]
 scale = Vector2(0.5625, 0.5625)

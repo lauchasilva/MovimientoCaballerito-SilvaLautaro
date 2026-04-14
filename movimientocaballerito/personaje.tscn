@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://gbt5kkuskfjh"]
+
+[ext_resource type="Texture2D" uid="uid://ca4b40act8a2m" path="res://icon.svg" id="1_4e5bt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ltgau"]
+size = Vector2(70, 70)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yppqc"]
+size = Vector2(62, 49)
+
+[node name="Personaje" type="CharacterBody2D"]
+
+[node name="CuerpoVisual" type="Sprite2D" parent="."]
+scale = Vector2(0.5625, 0.5625)
+texture = ExtResource("1_4e5bt")
+
+[node name="HitBoxPJ" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ltgau")
+
+[node name="AreaAtaque" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaAtaque"]
+position = Vector2(68, -2.5)
+shape = SubResource("RectangleShape2D_yppqc")
+debug_color = Color(0.997036, 0, 0.174613, 0.42)
+
+[node name="TimerAtaque" type="Timer" parent="."]
+wait_time = 0.5

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ca4b40act8a2m" path="res://icon.svg" id="1_4e5bt"]
 [ext_resource type="Script" path="res://personaje.gd" id="1_ltgau"]
+[ext_resource type="Script" uid="uid://bgr8n4drn7c1q" path="res://personaje.gd" id="1_ltgau"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ltgau"]
 size = Vector2(70, 70)

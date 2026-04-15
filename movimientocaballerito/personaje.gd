@@ -2,10 +2,9 @@ extends CharacterBody2D
 
 @export var SPEED = 300.0
 @export var JUMP_VELOCITY = -400.0
-var PUEDE_PEGAR = true
-var PEGANDO = false
 @onready var AREA_ATAQUE: CollisionShape2D = $AreaAtaque/CollisionShape2D
 var GIRADO_DERECHA = true
+@onready var COOLDOWN_ATAQUE: Timer = $TimerAtaque
 
 
 func _physics_process(delta: float) -> void:
@@ -52,4 +51,7 @@ func mirar():
 			AREA_ATAQUE.rotation = 0
 
 func atacar():
-	pass
+	if COOLDOWN_ATAQUE.is_stopped():
+		print("atacando")
+		COOLDOWN_ATAQUE.start(0.5)
+		

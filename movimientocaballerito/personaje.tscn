@@ -28,3 +28,4 @@ debug_color = Color(0.997036, 0, 0.174613, 0.42)
 
 [node name="TimerAtaque" type="Timer" parent="."]
 wait_time = 0.5
+one_shot = true

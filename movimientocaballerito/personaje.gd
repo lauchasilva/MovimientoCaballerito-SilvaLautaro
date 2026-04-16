@@ -5,17 +5,23 @@ extends CharacterBody2D
 @onready var AREA_ATAQUE: CollisionShape2D = $AreaAtaque/CollisionShape2D
 var GIRADO_DERECHA = true
 @onready var COOLDOWN_ATAQUE: Timer = $TimerAtaque
-@onready var CUERPO_PJ : CollisionShape2D = $HitBoxPJ
+@onready var CUERPO_PJ : CollisionShape2D = $Area2D/HitBoxPJ
 var KNOCKBACK_FUERTE = 1000.0
-
+var KNOCKBACK_DEBIL = 500.0
+@onready var COOLDOWN_DANO_RECIBIDO: Timer = $TimerDanoRecibido
+var SEGUNDO_SALTO_DISPONIBLE = false
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+	if is_on_floor():
+		SEGUNDO_SALTO_DISPONIBLE = true
 	# Handle jump.
-	if Input.is_action_just_pressed("saltar") and is_on_floor():
+	if Input.is_action_pressed("saltar") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("saltar") and not is_on_floor():
+		segundo_salto()
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis("izquierda", "derecha")
@@ -74,3 +80,19 @@ func _on_area_ataque_body_entered(body: Node2D) -> void:
 		direccion.y = direccion.y * 0.4
 		velocity = direccion * KNOCKBACK_FUERTE
 		move_and_slide() 
+
+func _on_cuerpo_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemigos") and COOLDOWN_DANO_RECIBIDO.is_stopped():
+		var direccion = (global_position - body.global_position).normalized()
+		direccion.y = direccion.y * 0.4
+		velocity = direccion * KNOCKBACK_DEBIL
+		move_and_slide()
+		COOLDOWN_DANO_RECIBIDO.start(1.0)
+		
+
+func segundo_salto():
+	if SEGUNDO_SALTO_DISPONIBLE:
+		velocity.y = JUMP_VELOCITY *0.5
+		SEGUNDO_SALTO_DISPONIBLE = false
+	else:
+		SEGUNDO_SALTO_DISPONIBLE = false

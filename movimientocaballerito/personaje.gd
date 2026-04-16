@@ -54,4 +54,6 @@ func atacar():
 	if COOLDOWN_ATAQUE.is_stopped():
 		print("atacando")
 		COOLDOWN_ATAQUE.start(0.5)
-		
+
+func _on_area_ataque_body_entered(body: Node2D) -> void:
+	pass

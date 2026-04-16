@@ -1,10 +1,12 @@
 extends CharacterBody2D
 
 @export var SPEED = 300.0
-@export var JUMP_VELOCITY = -400.0
+@export var JUMP_VELOCITY = -600.0
 @onready var AREA_ATAQUE: CollisionShape2D = $AreaAtaque/CollisionShape2D
 var GIRADO_DERECHA = true
 @onready var COOLDOWN_ATAQUE: Timer = $TimerAtaque
+@onready var CUERPO_PJ : CollisionShape2D = $HitBoxPJ
+var KNOCKBACK_FUERTE = 1000.0
 
 
 func _physics_process(delta: float) -> void:
@@ -54,6 +56,15 @@ func atacar():
 	if COOLDOWN_ATAQUE.is_stopped():
 		print("atacando")
 		COOLDOWN_ATAQUE.start(0.5)
+		var cuerpos = $AreaAtaque.get_overlapping_bodies()
+		for body in cuerpos:
+			if body.is_in_group("enemigos"):
+				_on_area_ataque_body_entered(body)
 
 func _on_area_ataque_body_entered(body: Node2D) -> void:
-	pass
+	if body.is_in_group("enemigos") and Input.is_action_just_pressed("atacar"):
+		print("Enemigo Golpeado")
+		var direccion = (global_position - body.global_position).normalized()
+		direccion.y = direccion.y * 0.4
+		velocity = direccion * KNOCKBACK_FUERTE
+		move_and_slide() 

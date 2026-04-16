@@ -10,8 +10,17 @@ var KNOCKBACK_FUERTE = 1000.0
 var KNOCKBACK_DEBIL = 500.0
 @onready var COOLDOWN_DANO_RECIBIDO: Timer = $TimerDanoRecibido
 var SEGUNDO_SALTO_DISPONIBLE = false
+var DASH_DISPONIBLE = true
+@onready var COOLDOWN_DASH: Timer = $TimerDash
+var VELOCIDAD_DASH = 2000.0
+var dash_activo = false
+var dash_duracion = 0.10
+var input_bloqueado = false
 
 func _physics_process(delta: float) -> void:
+	if dash_activo:
+		move_and_slide()
+		return
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -22,6 +31,8 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 	if Input.is_action_just_pressed("saltar") and not is_on_floor():
 		segundo_salto()
+	if Input.is_action_just_pressed("dash"):
+		dash()
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis("izquierda", "derecha")
@@ -80,6 +91,9 @@ func _on_area_ataque_body_entered(body: Node2D) -> void:
 		direccion.y = direccion.y * 0.4
 		velocity = direccion * KNOCKBACK_FUERTE
 		move_and_slide() 
+		SEGUNDO_SALTO_DISPONIBLE = true
+	if body.is_in_group("enemigos") and Input.is_action_just_pressed("atacar") and AREA_ATAQUE.position == Vector2 (0,68):
+		COOLDOWN_DASH.stop()
 
 func _on_cuerpo_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemigos") and COOLDOWN_DANO_RECIBIDO.is_stopped():
@@ -92,7 +106,26 @@ func _on_cuerpo_body_entered(body: Node2D) -> void:
 
 func segundo_salto():
 	if SEGUNDO_SALTO_DISPONIBLE:
-		velocity.y = JUMP_VELOCITY *0.5
+		velocity.y = JUMP_VELOCITY *0.8
 		SEGUNDO_SALTO_DISPONIBLE = false
 	else:
 		SEGUNDO_SALTO_DISPONIBLE = false
+
+func dash():
+	if COOLDOWN_DASH.is_stopped() and dash_activo == false:
+		dash_activo = true
+		COOLDOWN_DASH.start(0.5)
+		bloquear_input(dash_duracion)
+		var direccion = Input.get_axis("izquierda", "derecha")
+		if direccion == 0:
+			direccion = 1 if GIRADO_DERECHA else -1
+		velocity.x = direccion * VELOCIDAD_DASH
+		move_and_slide()
+		await get_tree().create_timer(dash_duracion).timeout
+		dash_activo = false
+		input_bloqueado = false  # Desbloquear
+
+func bloquear_input(duracion: float):
+	input_bloqueado = true
+	await get_tree().create_timer(duracion).timeout
+	input_bloqueado = false

@@ -51,11 +51,17 @@ func mirar():
 		else:
 			AREA_ATAQUE.position = Vector2 (-68.0, 0)
 			AREA_ATAQUE.rotation = 0
+	if not Input.is_action_pressed("izquierda") and not Input.is_action_pressed("derecha") and Input.is_action_pressed("abajo"):
+		AREA_ATAQUE.position = Vector2 (0, 68.0)
+		AREA_ATAQUE.rotation = 90.0
+	if not Input.is_action_pressed("izquierda") and not Input.is_action_pressed("derecha") and Input.is_action_pressed("saltar"):
+		AREA_ATAQUE.position = Vector2 (0, -68.0)
+		AREA_ATAQUE.rotation = 90.0
 
 func atacar():
 	if COOLDOWN_ATAQUE.is_stopped():
 		print("atacando")
-		COOLDOWN_ATAQUE.start(0.5)
+		COOLDOWN_ATAQUE.start(0.3)
 		var cuerpos = $AreaAtaque.get_overlapping_bodies()
 		for body in cuerpos:
 			if body.is_in_group("enemigos"):
